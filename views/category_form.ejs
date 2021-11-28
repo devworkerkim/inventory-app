@@ -1,0 +1,17 @@
+<%- include ./parts/header.ejs %>
+
+<h1><%- title %></h1>
+<% if (errors) { %>
+    <% for (var i = 0; i < errors.length; i++) { %>
+        <p><%= errors[i].msg %></p>
+    <% } %>
+<% } %>
+<form action="" method="POST">
+    <label for="name">Category Name: </label>
+    <input type="text" name="name" id="name" value="<%- category ? category.name : '' %>" />
+    <label for="description">Category Description: </label>
+    <textarea name="description" id="description" placeholder="Enter category description"><%- category ? category.description : '' %></textarea>
+    <input type="submit">
+</form>
+
+<%- include ./parts/footer.ejs %>

@@ -3,7 +3,15 @@ var Category = require('../models/category');
 var async = require('async');
 
 exports.index = function(req, res) {
-    res.render('index', { title: 'Inventory Page'});
+
+    async.parallel({
+        categories: function(callback) {
+            Category.find().countDocuments().exec(callback);
+        }
+    }, function (err, results) {
+        if (err) { return next(err) }
+        res.render('index', { title: 'Inventory Page', categoryCount: results.categories});
+    })
 }
 
 // Display list of all items.

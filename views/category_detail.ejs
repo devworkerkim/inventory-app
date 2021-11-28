@@ -1,0 +1,9 @@
+<%- include ./parts/header.ejs %>
+
+<h1><%- category.name %></h1>
+<p><%- category.description %></p>
+
+<a href="/inventory/category/<%- category._id %>/update">Update Category</a>
+<a href="/inventory/category/<%- category._id %>/delete">Delete Category</a>
+
+<%- include ./parts/footer.ejs %>
