@@ -1,0 +1,12 @@
+<%- include ./parts/header.ejs %>
+
+<h1><%- item.name %></h1>
+<p><%- item.description %></p>
+<p>Category: <%- item.category %></p>
+<p>Price: $<%- item.price %></p>
+<p>Quantity: <%- item.quantity %></p>
+
+<a href="/inventory/item/<%- item._id %>/update">Update Item</a>
+<a href="/inventory/item/<%- item._id %>/delete">Delete Item</a>
+
+<%- include ./parts/footer.ejs %>

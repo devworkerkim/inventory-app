@@ -1,4 +1,5 @@
-var Category = require('../models/category');
+const Category = require('../models/category');
+const Item = require('../models/item');
 const { body, validationResult } = require('express-validator');
 
 // Display list of all categories.
@@ -18,7 +19,11 @@ exports.category_detail = function(req, res) {
     Category.findById(req.params.id)
         .exec(function (err, category) {
             if (err) console.error(err);
-            res.render('category_detail', { title: category.name, category: category });
+            Item.find({ category: category.name })
+            .exec(function (err, result) {
+                if (err) console.log(err);
+                res.render('category_detail', { title: category.name, category: category, items: result });
+            })
         });
 };
 
@@ -79,8 +84,12 @@ exports.category_delete_get = function(req, res) {
 
     Category.findById(req.params.id)
         .exec(function (err, category) {
-            if (err) console.error(err);
-            res.render('category_delete', { title: 'Delete ' + category.name, category: category });
+            if (err) console.log(err);
+            Item.find({ category: category.name })
+            .exec(function (err, results) {
+                if (err) console.log(err)
+                res.render('category_delete', { title: 'Delete ' + category.name, category: category, items: results });
+            })
         });
 };
 

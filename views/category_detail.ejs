@@ -2,6 +2,11 @@
 
 <h1><%- category.name %></h1>
 <p><%- category.description %></p>
+<ul>
+    <% for (var item of items) { %>
+        <li><a href="/inventory/item/<%- item._id %>"><%- item.name %></a></li>
+    <% } %> 
+</ul>
 
 <a href="/inventory/category/<%- category._id %>/update">Update Category</a>
 <a href="/inventory/category/<%- category._id %>/delete">Delete Category</a>

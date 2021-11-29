@@ -1,0 +1,10 @@
+<%- include ./parts/header.ejs %>
+
+<h1><%= title %></h1>
+<ul>
+    <% for (var item of items) { %>
+        <li><a href="/inventory/item/<%= item._id %>"><%- item.name %></a></li>
+    <% } %>
+</ul>
+
+<%- include ./parts/footer.ejs %>

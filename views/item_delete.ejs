@@ -1,0 +1,14 @@
+<%- include ./parts/header.ejs %>
+
+<h1><%- item.name %></h1>
+<p><%- item.description %></p>
+<p>Category: <%- item.category %></p>
+<p>Price: $<%- item.price %></p>
+<p>Quantity: <%- item.quantity %></p>
+
+<p>Are you sure you want to delete this item?</p>
+<form action="" method="POST">
+    <input type="submit" value="Delete Item" />
+</form>
+
+<%- include ./parts/footer.ejs %>

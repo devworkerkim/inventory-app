@@ -1,0 +1,39 @@
+<%- include ./parts/header.ejs %>
+
+<h1><%- title %></h1>
+<% if (errors) { %>
+    <% for (var i = 0; i < errors.length; i++) { %>
+        <p><%= errors[i].msg %></p>
+    <% } %>
+<% } %>
+<form action="" method="POST">
+    <label for="name">Item Name: </label>
+    <input type="text" name="name" id="name" value="<%- item ? item.name : '' %>" />
+    <label for="description">Item Description: </label>
+    <textarea name="description" id="description" placeholder="Enter item description"><%- item ? item.description : '' %></textarea>
+    <label for="category">Category:</label>
+    <% if (item) { %>
+        <select id="item.form-control" placeholder="Select category" name="category" required="true">
+            <% for (var i = 0; i < categories.length; i++) { %>
+                <option value="<%- categories[i].name %>" <%- item.category===categories[i].name ? "selected" : "" %>><%- categories[i].name %></option>
+            <% } %>
+        </select>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" value="<%- item.price %>" min="0" />
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" value="<%- item.quantity %>" min="0" />
+    <% } else { %>
+        <select id="item.form-control" placeholder="Select category" name="category" required="true">
+            <% for (var i = 0; i < categories.length; i++) { %>
+                <option value="<%- categories[i].name %>" <%- i===0 ? "selected" : "" %>><%- categories[i].name %></option>
+            <% } %>
+        </select>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" min="0" placeholder="1.00" />
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="0" step="1"/>
+    <% } %>
+    <input type="submit">
+</form>
+
+<%- include ./parts/footer.ejs %>
