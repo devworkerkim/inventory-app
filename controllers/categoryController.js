@@ -29,7 +29,7 @@ exports.category_detail = function(req, res) {
 
 // Display category create form on GET.
 exports.category_create_get = function(req, res) {
-    res.render('category_form', { title: 'Create Category', category: undefined, errors: undefined });
+    res.render('category_form', { title: 'Create Category', category: undefined, update: false, errors: undefined });
 };
 
 // Handle category create on POST.
@@ -53,7 +53,7 @@ exports.category_create_post = [
         if (!errors.isEmpty()) {
             console.log(errors);
             // There are errors. Render the form again with sanitized values/error messages.
-            res.render('category_form', { title: 'Create Category', category: category, errors: errors.array()});
+            res.render('category_form', { title: 'Create Category', category: category, update: false, errors: errors.array()});
             return;
         }
         else {
@@ -96,10 +96,15 @@ exports.category_delete_get = function(req, res) {
 // Handle category delete on POST.
 exports.category_delete_post = function(req, res) {
     
-    Category.findByIdAndDelete(req.params.id, function deleteCategory(err) {
-        if (err) console.log(err);
-        res.redirect('/inventory/category');
-    })
+    if (req.body.password !== process.env.PASSWORD) {
+        res.redirect('/inventory/category/' + req.params.id + '/delete');
+    }
+    else {
+        Category.findByIdAndDelete(req.params.id, function deleteCategory(err) {
+            if (err) console.log(err);
+            res.redirect('/inventory/category');
+        });
+    }
 };
 
 // Display category update form on GET.
@@ -108,7 +113,7 @@ exports.category_update_get = function(req, res) {
     Category.findById(req.params.id)
         .exec(function (err, category) {
             if (err) console.log(err);
-            res.render('category_form', { title: 'Update ' + category.name, category: category, errors: undefined });
+            res.render('category_form', { title: 'Update ' + category.name, category: category, update: true, errors: undefined });
         });
 };
 
@@ -118,6 +123,7 @@ exports.category_update_post = [
     // Validate and santize the name and description fields.
     body('name', 'Category name required').trim().isLength({ min: 1 }).escape(),
     body('description', 'Invalid description').optional().trim().escape(),
+    body('password', 'Invalid password').equals(process.env.PASSWORD),
 
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -133,7 +139,7 @@ exports.category_update_post = [
         if (!errors.isEmpty()) {
             console.log(errors);
             // There are errors. Render the form again with sanitized values/error messages.
-            res.render('category_form', { title: 'Update' + category.name, category: category, errors: errors.array()});
+            res.render('category_form', { title: 'Update' + category.name, category: category, update: true, errors: errors.array()});
             return;
         }
         else {

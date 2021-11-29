@@ -11,6 +11,10 @@
     <input type="text" name="name" id="name" value="<%- category ? category.name : '' %>" />
     <label for="description">Category Description: </label>
     <textarea name="description" id="description" placeholder="Enter category description"><%- category ? category.description : '' %></textarea>
+    <% if (update) { %>
+        <label for="password">Password: </label>
+        <input type="password" name="password" id="password" />
+    <% } %>
     <input type="submit">
 </form>
 

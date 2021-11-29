@@ -27,6 +27,10 @@
     <input type="number" id="price" name="price" <% if (item) { %>value="<%- item.price %>"<% } %> step="0.01" min="0" placeholder="1.00" />
     <label for="quantity">Quantity:</label>
     <input type="number" id="quantity" name="quantity" <% if (item) { %>value="<%- item.quantity %>"<% } %> min="0" step="1" placeholder="0" />
+    <% if (update) { %>
+        <label for="password">Password: </label>
+        <input type="password" name="password" id="password" />
+    <% } %>
     <input type="submit">
 </form>
 

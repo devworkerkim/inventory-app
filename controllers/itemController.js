@@ -44,7 +44,7 @@ exports.item_create_get = function(req, res) {
     Category.find().sort({ name: 'asc' })
         .exec(function (err, result) {
             if (err) console.log(err)
-            res.render('item_form', { title: 'Create Item', item: undefined, categories: result, errors: undefined});
+            res.render('item_form', { title: 'Create Item', item: undefined, categories: result, update: false, errors: undefined});
         });
 };
 
@@ -78,7 +78,7 @@ exports.item_create_post = [
             Category.find().sort({ name: 'asc' })
             .exec(function (err, result) {
                 if (err) console.log(err)
-                res.render('item_form', { title: 'Create Item', item: item, categories: result, errors: errors.array()});
+                res.render('item_form', { title: 'Create Item', item: item, categories: result, update: false, errors: errors.array()});
             }); 
             return;
         }
@@ -117,11 +117,16 @@ exports.item_delete_get = function(req, res) {
 
 // Handle item delete on POST.
 exports.item_delete_post = function(req, res) {
-        
-    Item.findByIdAndDelete(req.params.id, function deleteItem(err) {
-        if (err) console.log(err);
-        res.redirect('/inventory/item');
-    })
+    
+    if (req.body.password !== process.env.PASSWORD) {
+        res.redirect('/inventory/item/' + req.params.id + '/delete');
+    }
+    else {
+        Item.findByIdAndDelete(req.params.id, function deleteItem(err) {
+            if (err) console.log(err);
+            res.redirect('/inventory/item');
+        })
+    }
 };
 
 // Display item update form on GET.
@@ -136,7 +141,7 @@ exports.item_update_get = function(req, res) {
         }
     }, function (err, results) {
         if (err) { return next(err) }
-        res.render('item_form', { title: 'Inventory Page', categories: results.categories, item: results.item, errors: undefined});
+        res.render('item_form', { title: 'Inventory Page', categories: results.categories, item: results.item, update: true, errors: undefined});
     })
 }
 
@@ -149,6 +154,7 @@ exports.item_update_post = [
     body('category', 'Item category required').escape(),
     body('price', 'Invalid price').isCurrency({ allow_negatives: false }),
     body('quantity', 'Invalid quantity').isInt({ min: 0 }),
+    body('password', 'Invalid password').equals(process.env.PASSWORD),
 
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -171,7 +177,7 @@ exports.item_update_post = [
             Category.find().sort({ name: 'asc' })
             .exec(function (err, result) {
                 if (err) console.log(err)
-                res.render('item_form', { title: 'Update ' + item.name, item: item, categories: result, errors: errors.array()});
+                res.render('item_form', { title: 'Update ' + item.name, item: item, categories: result, update: true, errors: errors.array()});
             }); 
             return;
         }
