@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const multer = require('multer');
+const upload = multer({dest: './public/uploads'});
 
 // Require controller modules.
 var item_controller = require('../controllers/itemController');
@@ -27,6 +29,12 @@ router.get('/item/:id/update', item_controller.item_update_get);
 
 // POST request to update item.
 router.post('/item/:id/update', item_controller.item_update_post);
+
+// GET request to add image to item.
+router.get('/item/:id/addimage', item_controller.item_addimage_get);
+
+// POST request to add image to item.
+router.post('/item/:id/addimage', item_controller.item_addimage_post);
 
 // GET request for one item.
 router.get('/item/:id', item_controller.item_detail);

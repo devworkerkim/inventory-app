@@ -11,7 +11,7 @@ var inventoryRouter = require('./routes/inventory');
 
 var app = express();
 
-//Set up mongoose connection
+// Set up mongoose connection
 var mongoose = require('mongoose');
 var mongoDB = process.env.MONGODB_SERVER;
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});

@@ -51,7 +51,6 @@ exports.category_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            console.log(errors);
             // There are errors. Render the form again with sanitized values/error messages.
             res.render('category_form', { title: 'Create Category', category: category, update: false, errors: errors.array()});
             return;
@@ -137,7 +136,6 @@ exports.category_update_post = [
         );
 
         if (!errors.isEmpty()) {
-            console.log(errors);
             // There are errors. Render the form again with sanitized values/error messages.
             res.render('category_form', { title: 'Update' + category.name, category: category, update: true, errors: errors.array()});
             return;

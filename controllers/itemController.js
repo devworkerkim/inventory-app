@@ -1,7 +1,20 @@
+const path = require('path');
+const fs = require('fs');
 const Item = require('../models/item');
 const Category = require('../models/category');
 const async = require('async');
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
+
+// Set Storage
+const storage = multer.diskStorage({
+    destination: './public/uploads',
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({storage: storage,}).single('image');
 
 exports.index = function(req, res) {
 
@@ -122,8 +135,16 @@ exports.item_delete_post = function(req, res) {
         res.redirect('/inventory/item/' + req.params.id + '/delete');
     }
     else {
-        Item.findByIdAndDelete(req.params.id, function deleteItem(err) {
+        Item.findByIdAndDelete(req.params.id, function deleteItem(err, deletedItem) {
             if (err) console.log(err);
+            for (let image of deletedItem.images) {
+                fs.unlink(image.path, (err) => {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                });
+            }
             res.redirect('/inventory/item');
         })
     }
@@ -191,3 +212,26 @@ exports.item_update_post = [
         }        
     }
 ];
+
+exports.item_addimage_get = function (req, res) {
+    res.render('addimage', {title: 'Add Image'});
+}
+
+exports.item_addimage_post = function (req, res) {
+    upload(req, res, (err) => {
+        if (err) res.render('addimage', {title: 'Add Image'});
+        else if (req.file === undefined) {
+            res.redirect('/inventory/item/' + req.params.id);
+        }
+        else {
+            Item.findById(req.params.id)
+                .exec(function (err, result) {
+                    result.images.push(req.file);
+                    result.save(function (err, doc) {
+                        if (err) console.log(err);
+                        res.redirect(result.url);
+                    });
+                });
+        }
+    })
+}

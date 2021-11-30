@@ -9,6 +9,7 @@ var ItemSchema = new Schema(
     category: {type: String, required: true},
     price: {type: Number, required: true, min: 0, default: 0},
     quantity: {type: Number, required: true, min: 0, default: 0},
+    images: {type: [Object], default: []}
   }
 );
 
